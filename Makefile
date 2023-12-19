@@ -5,7 +5,7 @@ install:
 	composer install
 
 lint:
-	composer run-script phpcs -- --standard=PSR12 public app
+	composer run-script phpcs -- --standard=PSR12 public
 lint2:
 	composer run-script phpcs -- --standard=PSR12 public tests
 
