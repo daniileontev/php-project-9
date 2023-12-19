@@ -1,12 +1,10 @@
 <?php
-
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use DI\Container;
 use Slim\Factory\AppFactory;
-
 
 $autoloadPath1 = __DIR__ . '/../../../autoload.php';
 $autoloadPath2 = __DIR__ . '/../vendor/autoload.php';
