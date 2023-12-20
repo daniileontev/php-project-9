@@ -10,53 +10,50 @@ final class DataBaseConnection
      */
     private static ?DataBaseConnection $conn = null;
 
-    /**
-     * Подключение к базе данных и возврат экземпляра объекта \PDO
-     * @return \PDO
-     * @throws \Exception
-     */
     public function connect()
     {
-        if (getenv('DATABASE_URL')) {
-            $databaseUrl = parse_url(getenv('DATABASE_URL'));
-        }
-        if (isset($databaseUrl['host'])) {
-            $params['host'] = $databaseUrl['host'];
-            $params['port'] = isset($databaseUrl['port']) ?: 5432;
-            $params['database'] = ltrim($databaseUrl['path'], '/');
-            $params['user'] = $databaseUrl['user'];
-            $params['password'] = $databaseUrl['pass'];
+        $file = realpath(__DIR__ . '/database.ini');
+        if ($file === false) {
+            $databaseUrl = parse_url($_ENV['DATABASE_URL']);
+            $username = $databaseUrl['user']; // janedoe
+            $password = $databaseUrl['pass']; // mypassword
+            $host = $databaseUrl['host']; // localhost
+            $port = $databaseUrl['port']; // 5432
+            $dbName = ltrim($databaseUrl['path'], '/');
+            $conStr = sprintf(
+                "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
+                $host,
+                $port,
+                $dbName,
+                $username,
+                $password
+            );
         } else {
             $params = parse_ini_file('database.ini');
+            if ($params) {
+                $conStr = sprintf(
+                    "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
+                    $params['host'],
+                    $params['port'],
+                    $params['database'],
+                    $params['user'],
+                    $params['password']
+                );
+            } else {
+                return false;
+            }
         }
-        if ($params === false) {
-            throw new \Exception("Error reading database configuration file");
-        }
-        $conStr = sprintf(
-            "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
-            $params['host'],
-            $params['port'],
-            $params['database'],
-            $params['user'],
-            $params['password']
-        );
-
         $pdo = new \PDO($conStr);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         return $pdo;
     }
-
-    /**
-     * возврат экземпляра объекта Connection
-     * тип @return
-     */
     public static function get()
     {
-        if (null === static::$conn) {
-            static::$conn = new self();
+        if (null === self::$conn) {
+            self::$conn = new self();
         }
 
-        return static::$conn;
+        return self::$conn;
     }
 
     protected function __construct()
