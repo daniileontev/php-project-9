@@ -5,7 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Hexlet\\Code\\": "src/"
+            "Hexlet\\Code\\": "src/",
+            "Database\\": "src/"
         }
     },
     "authors": [
@@ -24,7 +25,11 @@
         "symfony/string": "^6.3",
         "tightenco/collect": "^9.52",
         "slim/flash": "^0.4.0",
-        "slim/twig-view": "^3.3"
+        "slim/twig-view": "^3.3",
+        "ext-pdo": "*",
+        "vlucas/valitron": "^1.4",
+        "guzzlehttp/guzzle": "^7.0",
+        "imangazaliev/didom": "^2.0"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",

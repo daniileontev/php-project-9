@@ -2,16 +2,13 @@
 
 namespace Hexlet\Code;
 
-/**
- * Создание класса Connection
- */
-final class Connection
+final class DataBaseConnection
 {
     /**
      * Connection
      * тип @var
      */
-    private static ?Connection $conn = null;
+    private static ?DataBaseConnection $conn = null;
 
     /**
      * Подключение к базе данных и возврат экземпляра объекта \PDO
@@ -20,13 +17,21 @@ final class Connection
      */
     public function connect()
     {
-        // чтение параметров в файле конфигурации ini
-        $params = parse_ini_file('database.ini');
+        if (getenv('DATABASE_URL')) {
+            $databaseUrl = parse_url(getenv('DATABASE_URL'));
+        }
+        if (isset($databaseUrl['host'])) {
+            $params['host'] = $databaseUrl['host'];
+            $params['port'] = isset($databaseUrl['port']) ?: 5432;
+            $params['database'] = ltrim($databaseUrl['path'], '/');
+            $params['user'] = $databaseUrl['user'];
+            $params['password'] = $databaseUrl['pass'];
+        } else {
+            $params = parse_ini_file('database.ini');
+        }
         if ($params === false) {
             throw new \Exception("Error reading database configuration file");
         }
-
-        // подключение к базе данных postgresql
         $conStr = sprintf(
             "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
             $params['host'],
@@ -35,10 +40,10 @@ final class Connection
             $params['user'],
             $params['password']
         );
-
+        var_dump(new \PDO($conStr));
         $pdo = new \PDO($conStr);
+        var_dump($pdo);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
         return $pdo;
     }
 
@@ -57,6 +62,5 @@ final class Connection
 
     protected function __construct()
     {
-
     }
 }
