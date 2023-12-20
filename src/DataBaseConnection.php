@@ -40,9 +40,8 @@ final class DataBaseConnection
             $params['user'],
             $params['password']
         );
-        var_dump(new \PDO($conStr));
+
         $pdo = new \PDO($conStr);
-        var_dump($pdo);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         return $pdo;
     }
