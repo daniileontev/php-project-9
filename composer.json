@@ -29,7 +29,8 @@
         "ext-pdo": "*",
         "vlucas/valitron": "^1.4",
         "guzzlehttp/guzzle": "^7.0",
-        "imangazaliev/didom": "^2.0"
+        "imangazaliev/didom": "^2.0",
+        "nesbot/carbon": "^2.72"
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.7",
